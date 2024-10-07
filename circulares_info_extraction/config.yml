@@ -1,0 +1,263 @@
+openai:
+  model_128k: "gpt-4o-mini"
+  temperature: 0
+  tokens:
+    max_gpt_4o: 120000
+    lines_per_batch: 50
+    max_batches_tables: 25
+  structured_output:
+    first_page: True
+    standard: True
+    tabla_info_proceso: True
+
+image_processing:
+  textract_confidence_first_page: 95
+  textract_confidence: 85
+  noise_threshold: 20
+  noise_detection:
+    filter_disk_ratio: 3
+    morphological_removal_ratio: 3
+  advanced:
+    median_blur_kernel_size: 3
+    kernel_height: 3
+    kernel_width: 2
+    gaussian_kernel_height: 5
+    gaussian_kernel_width: 5
+
+tables:
+  num_cols_table: 8
+  threshold: 0.5
+  min_confidence_table: 0.85
+  min_area: 50000
+  header_position: 300
+  footer_position: 250
+  sample_percentage: 0.3
+  max_pages: 100
+
+stamp_recognition:
+  use_lambda: True
+  aws:
+    initial_min_confidence: 97
+    confidence_step_down: 2
+    confidence_step_up: 1.5
+    max_iterations: 10
+    aws_rekognition_model_id: "arn:aws:rekognition:eu-west-2:330797680824:project/reconocimiento_de_sellos_bb_localisation/version/reconocimiento_de_sellos_bb_localisation.2024-03-31T20.18.25/1711930706410"
+  lambda:
+    min_confindence_lambda: 0.98
+    max_workers: 200
+
+anonymization: 
+  switch: False
+  shift: 3
+  score: 1.0
+  first_entitity: "CODIGO"
+  second_entitity: "PERSON"
+  third_entitity: "ORG"
+
+concurrency:
+  max_workers: 5
+  max_workers_tesseract: 5
+  max_workers_textract: 5
+  max_workers_gpt: 20
+
+find_judges:
+  min_num_letters_judge: 18
+  nombres_threshold_similarity: 87
+  juzgados_threshold_similarity: 97
+
+cols_to_keep:
+  retencion_suspension_remision:
+    - "NUMERO DE CITE"
+    - "FECHA DE CITE"
+    - "NOMBRE DE LA CIUDAD DEL SOLICITANTE"
+    - "APELLIDO PATERNO"
+    - "APELLIDO MATERNO"
+    - "NOMBRES"
+    - "RAZON SOCIAL"
+    - "TIPO DE DOCUMENTO DE IDENTIDAD"
+    - "NUMERO DE DOCUMENTO DE IDENTIDAD"
+    - "ABREVIACION DEL DEPARTAMENTO"
+    - "DEMANDANTE"
+    - "TIPO DE PROCESO"
+    - "MONEDA"
+    - "MONTO A SER RETENIDO"
+    - "DOCUMENTO DE RESPALDO"
+    - "NUMERO TIPO DE RESPALDO"
+    - "NOMBRE DE LA AUTORIDAD SOLICITANTE"
+    - "NOMBRE DEL JUZGADO"
+  informativa:
+    - "NOMBRE DE LA CIUDAD DEL SOLICITANTE"
+    - "FECHA DE PUBLICACION"
+    - "NOMBRE DE LA AUTORIDAD SOLICITANTE"
+    - "NOMBRE DEL JUZGADO"
+    - "DEMANDANTES"
+    - "DEMANDADOS"
+    - "TIPO DE PROCESO"
+    - "TIPO DE CASO"
+    - "NUMERO DOCUMENTO DE RESPALDO"
+    - "INSTRUCCION ESPECIFICA PARA EL BANCO"
+  combinada:
+    - "FECHA DE CITE"
+    - "NUMERO DE CITE"
+    - "NOMBRE DE LA CIUDAD DEL SOLICITANTE"
+    - "APELLIDO MATERNO"
+    - "APELLIDO PATERNO"
+    - "NOMBRES"
+    - "DEMANDADOS"
+    - "RAZON SOCIAL"
+    - "TIPO DE DOCUMENTO DE IDENTIDAD"
+    - "NUMERO DE DOCUMENTO DE IDENTIDAD"
+    - "DEMANDANTE"
+    - "DEMANDANTES"
+    - "FECHA DE PUBLICACION"
+    - "TIPO DE PROCESO"
+    - "TIPO DE CASO"
+    - "MONEDA"
+    - "MONTO A SER RETENIDO"
+    - "DOCUMENTO DE RESPALDO"
+    - "NUMERO DOCUMENTO DE RESPALDO"
+    - "NUMERO TIPO DE RESPALDO"
+    - "NOMBRE DE LA AUTORIDAD SOLICITANTE"
+    - "NOMBRE DEL JUZGADO"
+    - "INSTRUCCION ESPECIFICA PARA EL BANCO"
+  normativa:
+    - "FECHA DE PUBLICACION DE LA CARTA CIRCULAR"
+    - "NUMERO DE CARTA CIRCULAR"
+    - "NUMERO DE TRAMITE"
+    - "RESUMEN"
+    - "REFERENCIA"
+
+cols_info:
+  - "FECHA DE PUBLICACION DE LA CARTA CIRCULAR"
+  - "NUMERO DE CARTA CIRCULAR"
+  - "IDENTIFICADOR UNICO QUE REGISTRA ASFI"
+
+cols_to_clean_accents:
+  retencion_suspension_remision:
+    - "APELLIDO PATERNO"
+    - "APELLIDO MATERNO"
+    - "NOMBRES"
+    - "RAZON SOCIAL"
+    - "DEMANDANTE"
+    - "NOMBRE DE LA CIUDAD DEL SOLICITANTE"
+    - "NOMBRE DE LA AUTORIDAD SOLICITANTE"
+    - "NOMBRE DEL JUZGADO"
+    - "TIPO DE PROCESO"
+  informativa:
+    - "NOMBRE DE LA CIUDAD DEL SOLICITANTE"
+    - "NOMBRE DE LA AUTORIDAD SOLICITANTE"
+    - "NOMBRE DEL JUZGADO"
+    - "DEMANDANTES"
+    - "DEMANDADOS"
+    - "TIPO DE PROCESO"
+    - "INSTRUCCION ESPECIFICA PARA EL BANCO"
+  combinada:
+    - "APELLIDO MATERNO"
+    - "APELLIDO PATERNO"
+    - "DEMANDADOS"
+    - "DEMANDANTE"
+    - "DEMANDANTES"
+    - "INSTRUCCION ESPECIFICA PARA EL BANCO"
+    - "NOMBRE DE LA AUTORIDAD SOLICITANTE"
+    - "NOMBRE DE LA CIUDAD DEL SOLICITANTE"
+    - "NOMBRE DEL JUZGADO"
+    - "NOMBRES"
+    - "RAZON SOCIAL"
+    - "TIPO DE PROCESO"
+
+paths:
+  juzgados_file: "circulares_info_extraction/juzgados.csv"
+  db_names_file: "circulares_info_extraction/btn_givennames.txt"
+
+ciudades_departamentos_abreviaciones:
+  ACHACACHI: LP
+  AIQUILE: CB
+  AZURDUY: CH
+  BERMEJO: TJ
+  BETANZOS: PO
+  BUENA VISTA: SC
+  CAMARGO: CH
+  CAMIRI: SC
+  CAPINOTA: CB
+  CARANAVI: LP
+  CARAPARI: TJ
+  CHALLAPATA: OR
+  CHARAGUA: SC
+  CHIMORE: CB
+  CHUQUISACA: CH
+  CLIZA: CB
+  COBIJA: PD
+  COCHABAMBA: CB
+  COLCAPIRHUA: CB
+  COLOMI: CB
+  COMARAPA: SC
+  CONCEPCION: SC
+  COROICO: LP
+  COTAGAITA: PO
+  COTOCA: SC
+  CULPINA: CH
+  EL ALTO: LP
+  EL TORNO: SC
+  ENTRE RIOS: TJ
+  GUARAYOS: SC
+  GUAYARAMERIN: BE
+  IVIRGARZAMA: CB
+  IXIAMAS: LP
+  LA GUARDIA: SC
+  LA PAZ: LP
+  LAGUNILLAS: SC
+  LLALLAGUA: PO
+  MACHARETI: CH
+  MAGDALENA: BE
+  MINER: SC
+  MIZQUE: CB
+  MONTEAGUDO: CH
+  MONTERO: SC
+  ORURO: OR
+  PADCAYA: TJ
+  PAILON: SC
+  PALOS BLANCOS: LP
+  PLAN 3000: SC
+  POTOSI: PO
+  PUCARANI: LP
+  PUERTO SUAREZ: SC
+  PUNATA: CB
+  QUILLACOLLO: CB
+  QUIME: LP
+  RIBERALTA: BE
+  RURRENABAQUE: BE
+  SACABA: CB
+  SAIPINA: SC
+  SAN BORJA: BE
+  SAN IGNACIO DE VELA: SC
+  SAN JOAQUIN: BE
+  SAN JULIAN: SC
+  SAN LORENZO: TJ
+  SANTA CRUZ: SC
+  SHINAHOTA: CB
+  SICA SICA: LP
+  SIPE SIPE: CB
+  SOPACHUY: CH
+  SORATA: LP
+  SUCRE: CH
+  TARATA: CB
+  TARIJA: TJ
+  TIQUIPAYA: CB
+  TIRAQUE: CB
+  TOTORA: CB
+  TRINIDAD: BE
+  TUPIZA: PO
+  UNCIA: PO
+  UYUNI: PO
+  VALLEGRANDE: SC
+  VIACHA: LP
+  VILLA MONTES: TJ
+  VILLA SERRANO: CH
+  VILLA TUNARI: CB
+  VILLAMONTES: TJ
+  VILLAZON: PO
+  VINTO: CB
+  WARNES: SC
+  YACUIBA: TJ
+  YAPACANI: SC
+  YOTALA: CH
