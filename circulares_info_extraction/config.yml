@@ -25,7 +25,7 @@ image_processing:
     gaussian_kernel_width: 5
 
 tables:
-  num_cols_table: 8
+  num_cols_table: 9
   threshold: 0.5
   min_confidence_table: 0.85
   min_area: 50000
@@ -166,8 +166,8 @@ cols_to_clean_accents:
     - "TIPO DE PROCESO"
 
 paths:
-  juzgados_file: "circulares_info_extraction/juzgados.csv"
-  db_names_file: "circulares_info_extraction/btn_givennames.txt"
+  juzgados_file: "api/circulares_info_extraction/juzgados.csv"
+  db_names_file: "api/circulares_info_extraction/btn_givennames.txt"
 
 ciudades_departamentos_abreviaciones:
   ACHACACHI: LP

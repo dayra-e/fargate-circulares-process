@@ -5,7 +5,7 @@ import os
 
 from presidio_analyzer import AnalyzerEngine, PatternRecognizer, Pattern, RecognizerRegistry
 from presidio_analyzer.nlp_engine import NerModelConfiguration, SpacyNlpEngine
-from circulares_info_extraction.config import LoadConfig
+from api.circulares_info_extraction.config import LoadConfig
 
 config = LoadConfig()
 config.set_section('anonymization')

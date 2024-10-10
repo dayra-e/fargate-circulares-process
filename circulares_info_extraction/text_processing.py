@@ -3,24 +3,24 @@ from time import time
 import tiktoken
 from tenacity import retry, stop_after_attempt, wait_fixed, wait_random
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from circulares_info_extraction.utils_etl import (harmonize_dataframe,
+from api.circulares_info_extraction.utils_etl import (harmonize_dataframe,
                                                       flatten_dictionary,
                                                       get_todays_date_in_spanish)
 
-from circulares_info_extraction.process_tables import (check_tables,
+from api.circulares_info_extraction.process_tables import (check_tables,
                                                            extract_tables_from_images_to_md,
                                                            extract_tables_from_images_to_md_parallel,
                                                            split_markdown_into_batches,
                                                            markdown_to_dataframe)
 
 
-from circulares_info_extraction.api_clients import textract_client
+from api.circulares_info_extraction.api_clients import textract_client
 
-from circulares_info_extraction.text_anonymization import Anonymizer
-from circulares_info_extraction.utils_etl import parallel_process
-from circulares_info_extraction.parsers import parse_to_text, parse_to_json, parse_markdown, parse_dict_keys
-from circulares_info_extraction.config import LoadConfig
-from circulares_info_extraction.prompt_models import CircularStandardModel, CircularFirstPageModel, CircularTablaInfoProcesoModel
+from api.circulares_info_extraction.text_anonymization import Anonymizer
+from api.circulares_info_extraction.utils_etl import parallel_process
+from api.circulares_info_extraction.parsers import parse_to_text, parse_to_json, parse_markdown, parse_dict_keys
+from api.circulares_info_extraction.config import LoadConfig
+from api.circulares_info_extraction.prompt_models import CircularStandardModel, CircularFirstPageModel, CircularTablaInfoProcesoModel
 
 config = LoadConfig()
 
@@ -38,51 +38,51 @@ CIRCULAR_FIRST_PAGE_MODEL = None
 CIRCULAR_STANDARD_MODEL = None
 CIRCULAR_TABLA_INFO_PROCESO_MODEL = None
 if STRUCTURED_OUT_FIRST_PAGE:
-    from circulares_info_extraction.prompts_structured import prompt_extraccion_info_oficios
+    from api.circulares_info_extraction.prompts_structured import prompt_extraccion_info_oficios
 
     CIRCULAR_FIRST_PAGE_MODEL = CircularFirstPageModel
 else:
-    from circulares_info_extraction.prompts import prompt_extraccion_info_oficios
+    from api.circulares_info_extraction.prompts import prompt_extraccion_info_oficios
 
 if ANONYMIZATION_SWITCH:
-    from circulares_info_extraction.prompts_with_anonymization import (prompt_extraction_table,
+    from api.circulares_info_extraction.prompts_with_anonymization import (prompt_extraction_table,
                                                         prompt_informativas,
                                                         prompt_clasificar_oficio,
                                                         prompt_extraction_normativa)
 
     if STRUCTURED_OUT_STANDARD:
-        from circulares_info_extraction.prompts_structured_with_anonymization import prompt_extraction_standard
+        from api.circulares_info_extraction.prompts_structured_with_anonymization import prompt_extraction_standard
 
         CIRCULAR_STANDARD_MODEL = CircularStandardModel
     else:
-        from circulares_info_extraction.prompts_with_anonymization import prompt_extraction_standard
+        from api.circulares_info_extraction.prompts_with_anonymization import prompt_extraction_standard
 
     if STRUCTURED_OUT_INFO_PROCESO:
-        from circulares_info_extraction.prompts_structured_with_anonymization import prompt_extraction_tabla_info_proceso
+        from api.circulares_info_extraction.prompts_structured_with_anonymization import prompt_extraction_tabla_info_proceso
 
         CIRCULAR_TABLA_INFO_PROCESO_MODEL = CircularTablaInfoProcesoModel
     else:
-        from circulares_info_extraction.prompts_with_anonymization import prompt_extraction_tabla_info_proceso
+        from api.circulares_info_extraction.prompts_with_anonymization import prompt_extraction_tabla_info_proceso
 
     anonymizer = Anonymizer()
 else:
-    from circulares_info_extraction.prompts import (prompt_extraction_table,
+    from api.circulares_info_extraction.prompts import (prompt_extraction_table,
                                                         prompt_informativas,
                                                         prompt_clasificar_oficio,
                                                         prompt_extraction_normativa)
 
     if STRUCTURED_OUT_STANDARD:
-        from circulares_info_extraction.prompts_structured import prompt_extraction_standard
+        from api.circulares_info_extraction.prompts_structured import prompt_extraction_standard
         CIRCULAR_STANDARD_MODEL = CircularStandardModel
     else:
-        from circulares_info_extraction.prompts import prompt_extraction_standard
+        from api.circulares_info_extraction.prompts import prompt_extraction_standard
 
     if STRUCTURED_OUT_INFO_PROCESO:
-        from circulares_info_extraction.prompts_structured import prompt_extraction_tabla_info_proceso
+        from api.circulares_info_extraction.prompts_structured import prompt_extraction_tabla_info_proceso
 
         CIRCULAR_TABLA_INFO_PROCESO_MODEL = CircularTablaInfoProcesoModel
     else:
-        from circulares_info_extraction.prompts import prompt_extraction_tabla_info_proceso
+        from api.circulares_info_extraction.prompts import prompt_extraction_tabla_info_proceso
 
 
 

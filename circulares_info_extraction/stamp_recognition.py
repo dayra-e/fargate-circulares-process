@@ -17,11 +17,11 @@ import time
 import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from circulares_info_extraction.utils_etl import (image_to_bytes,
+from api.circulares_info_extraction.utils_etl import (image_to_bytes,
                                                       image_to_base64)
-from circulares_info_extraction.api_clients import (rekognition,
+from api.circulares_info_extraction.api_clients import (rekognition,
                                                         lambda_client)  # AWS Rekognition:
-from circulares_info_extraction.config import LoadConfig
+from api.circulares_info_extraction.config import LoadConfig
 
 config = LoadConfig()
 

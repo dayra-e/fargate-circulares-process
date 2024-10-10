@@ -46,7 +46,7 @@ prompt_extraction_standard = [
     - Si no es una persona anota el nombre de la institucion financiera o empresa.
 - TIPO DE PROCESO: CIVIL EJECUTIVO, CIVIL MONITOREO EJECUTIVO, EJECUTIVO, PROCESO EJECUTIVO, COACTIVA, FISCAL o MONITORIO EJECUTIVO.
 - MONEDA: BS, USD (dolares) o UFV.
-- MONTO A SER RETENIDO: es la suma que corresponde al campo MONEDA y debe estar en formato numerico.
+- MONTO A SER RETENIDO: es la suma que correspondera al campo MONEDA y debe estar en formato numerico.
 - DOCUMENTO DE RESPALDO: solamente puede ser NUREJ, PIET, IANUS o CUD. Dejar vacio si no se encuentra.
 - NUMERO TIPO DE RESPALDO: es un numero de mas 5 digitos que corresponde al campo no nulo de DOCUMENTO DE RESPALDO.
 - NOMBRE DE LA AUTORIDAD SOLICITANTE: 
@@ -72,8 +72,7 @@ prompt_extraction_tabla_info_proceso = [
             {"role": "user",
              "content": """ Busca y extrae la siguiente informacion y presentala de la forma mas compacta posible en formato JSON.
 - NOMBRE DE LA CIUDAD DEL SOLICITANTE corresponde a la ciudad en Bolivia de donde viene la demanda.	
-- DOCUMENTO DE RESPALDO: solamente puede ser NUREJ, PIET, IANUS o CUD. Dejar vacio si no se encuentra.
-- NUMERO TIPO DE RESPALDO: es un numero de mas 5 digitos que corresponde al campo no nulo de DOCUMENTO DE RESPALDO. 
+- DOCUMENTO DE RESPALDO: Puede ser PLACA, POLIZA, LICENCIA, PIET, NUREJ o RESOLUCION ADMINISTRATIVA. En general es PLACA si es un documento de la aduana, dejar vacio si no se encuentra. 
 - NUMERO DE CITE:
     - de varias lineas y es la combinacion de diferentes formatos, de ser posible en el siguiente orden: numero de Oficio (Of. N XX/20XX, OFICIO N XXX/20XX), numero de Expediente (XX/20XX, EXP. N XX/XXX), Resolucion (XX/20XX) o numero de causa.
     - podria tener el formato OFICIO N XXX/20XX EXP. N XX/XX o RESOLUCION XX/20XX)

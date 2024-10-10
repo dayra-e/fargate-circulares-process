@@ -8,9 +8,9 @@ except:
 from tenacity import retry, stop_after_attempt, wait_fixed, wait_random
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pandas as pd
-from circulares_info_extraction.utils_etl import (image_to_bytes, 
+from api.circulares_info_extraction.utils_etl import (image_to_bytes, 
                                                       calculate_area)
-from circulares_info_extraction.config import LoadConfig
+from api.circulares_info_extraction.config import LoadConfig
 import random
 
 config = LoadConfig()

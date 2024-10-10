@@ -3,7 +3,7 @@ import pandas as pd
 from numpy import dtype
 from pandas.io.formats.style import Styler
 from typing import Tuple, Union, Callable, Dict
-from circulares_info_extraction.utils_etl import meausure_execution_time
+from api.circulares_info_extraction.utils_etl import meausure_execution_time
 
 
 def check_number_range(val, low, high):

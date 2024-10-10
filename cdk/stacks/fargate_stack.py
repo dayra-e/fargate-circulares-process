@@ -1,6 +1,5 @@
 from aws_cdk import (
     Stack, 
-    aws_s3 as s3, 
     aws_ec2 as ec2,
     aws_ecr as ecr,
     aws_ecs as ecs,
@@ -11,31 +10,15 @@ from aws_cdk import (
 from constructs import Construct
 
 class FargateStack(Stack):
-    def __init__(self, scope: Construct, id: str, table_arn: str, bucket_results_arn: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, 
+                 id: str, table_arn: str, 
+                 bucket_results_arn: str, 
+                 bucket_to_process_arn: str,
+                 bucket_to_process_name: str,
+                 vpc: ec2.IVpc, 
+                 security_group: ec2.SecurityGroup,
+                 **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        
-        # Crear una VPC con subnets públicas
-        vpc = ec2.Vpc(self, "FargateVPC", 
-                      max_azs=2,  # Usar 2 zonas de disponibilidad
-                      subnet_configuration=[
-                          ec2.SubnetConfiguration(
-                              name="PublicSubnet",
-                              subnet_type=ec2.SubnetType.PUBLIC  # Subnet pública con IP pública
-                          ),
-                          ec2.SubnetConfiguration(
-                              name="PrivateSubnet",
-                              subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT,  # Private subnet with NAT Gateway for outbound traffic
-                              cidr_mask=24
-                          )                          
-                      ])
-
-        # S3 Bucket
-        bucket_to_process = s3.Bucket(self, 
-                                        "ImagestoProcessgBucket",
-                                        versioned=False,
-                                        removal_policy=RemovalPolicy.DESTROY,
-                                        auto_delete_objects=True
-                                    )
         repository = ecr.Repository(self,
                             "FargateCircularProcessRepository",
                             repository_name="fargate-circular-process",
@@ -68,8 +51,8 @@ class FargateStack(Stack):
             ],
             resources=[
                 # Recursos de S3
-                bucket_to_process.bucket_arn,  # Bucket ARN
-                f"{bucket_to_process.bucket_arn}/*",  # Objetos dentro del bucket
+                bucket_to_process_arn,  # Bucket ARN
+                f"{bucket_to_process_arn}/*",  # Objetos dentro del bucket
                 bucket_results_arn,
                 f"{bucket_results_arn}/*",
                 # Recursos de DynamoDB
@@ -94,6 +77,7 @@ class FargateStack(Stack):
         ecs.FargateService(self, "CircularFargateService",
             cluster=cluster,
             task_definition=task_definition,
+            security_groups=[security_group], 
             assign_public_ip=True,  # Asignar una IP pública
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC)  # Ejecutar en subnets públicas
         )
@@ -105,7 +89,7 @@ class FargateStack(Stack):
                 detail_type=["Object Created"],
                 detail={
                     "bucket": {
-                        "name": [bucket_to_process.bucket_name]
+                        "name": [bucket_to_process_name]
                     }
                 }
             )
@@ -115,6 +99,8 @@ class FargateStack(Stack):
         rule.add_target(targets.EcsTask(
             cluster=cluster,
             task_definition=task_definition,
+            subnet_selection=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
+            assign_public_ip=True,
             task_count=1,
             launch_type=ecs.LaunchType.FARGATE,
             container_overrides=[{
@@ -127,5 +113,3 @@ class FargateStack(Stack):
                 ]
             }]
         ))
-
-

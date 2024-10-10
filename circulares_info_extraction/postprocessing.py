@@ -1,7 +1,7 @@
 import unicodedata
 import re
 import pandas as pd
-from circulares_info_extraction.config import LoadConfig
+from api.circulares_info_extraction.config import LoadConfig
 from typing import Union
 
 config = LoadConfig()

@@ -1,12 +1,12 @@
-from circulares_info_extraction.circular_validation import (check_date_format,
+from api.circulares_info_extraction.circular_validation import (check_date_format,
                                                                 check_number_range, check_identificador_asfi,
                                                                 check_nombre_completo, check_numero_carta_circular,
                                                                 check_val_in_column, generic_text_validation,
                                                                 is_row_value_empty, check_abreviacion_departamento,
                                                                 check_razon_social_full_name,
                                                                 MapperCircularValidationBuilder)
-from circulares_info_extraction.config import LoadConfig
-from circulares_info_extraction.circular_validation import apply_validation
+from api.circulares_info_extraction.config import LoadConfig
+from api.circulares_info_extraction.circular_validation import apply_validation
 from pandas import DataFrame
 from pandas.io.formats.style import Styler
 

@@ -155,28 +155,29 @@ prompt_extraction_table = [
      "content": """Tienes que procesar una tabla proveniente de la entidad reguladora de finanzas (ASFI/Juez) que se encuentra en formato markdown.
 Ciertas lineas de la tabla pueden ser ineligibles, procesa pas lineas que si son legibles.
 Cada fila de esta tabla corresponde a un DEMANDADO y tiene informacion de esta persona, los nombres son nombres comunes en español. 
-El TIPO DE DOCUMENTO DE IDENTIDAD solo puede ser CI, NIT o RUC.
 La MONEDA puede ser BS, USD o UFV.
 Para cada fila extrae la siguiente informacion:
 - APELLIDO PATERNO 
 - APELLIDO MATERNO
 - NOMBRES	
-- TIPO DE DOCUMENTO DE IDENTIDAD
-- NUMERO DE DOCUMENTO DE IDENTIDAD
 - RAZON SOCIAL
+- TIPO DE DOCUMENTO DE IDENTIDAD: unicamente puede ser CI, NIT o RUC.
+- NUMERO DE DOCUMENTO DE IDENTIDAD: si el TIPO DE DOCUMENTO DE IDENTIDAD es CI tomar unicamente los numeros. Ejemplo, si '12345 TA' entonces sera '12345' 
+- NUMERO TIPO DE RESPALDO: Corresponde al codigo que viene en la columna que puede tener por nombre PLACA, POLIZA, LICENCIA, PIET, NUREJ o RESOLUCION ADMINISTRATIVA.
 - MONEDA 
 - MONTO A SER RETENIDO
+- Si el demandado es una empresa anotale solamente en RAZON SOCIAL y deja vacio apellidos y nombres.
 Presenta los resultados en formato tabla con solo 8 columnas.
 Procesa todas las filas.
 Si no encuentras un valor deja el campo vacio ''.
 Solo presenta la tabla.
 Un ejemplo de respuesta correcta es :
-| APELLIDO PATERNO   | APELLIDO MATERNO   | NOMBRES           | TIPO DE DOCUMENTO DE IDENTIDAD   | NUMERO DE DOCUMENTO DE IDENTIDAD   | RAZON SOCIAL   | MONEDA   | MONTO A SER RETENIDO  |
-|:-------------------|:-------------------|:------------------|:---------------------------------|:-----------------------------------|:---------------|:---------|:----------------------|
-| RIOJA              | IRIARTE            | MARIA LUZ         | CI                               | 5296860 CO.                        |                |    BS    |         20.5          |
-| GARCIA             | SORIA              | NELY              | CI                               | 8675948 CO.                        |                |    BS    |         40.2          |
-| CASTELLON          | MELGAREJO          | LUIS              | CI                               | 524460-10 CO.                      |                |    BS    |         55.2          |
-|                    |                    |                   | NIT                              | 5309221017                         | EMPRESA COTAS  |    BS    |         10.5          |
+| APELLIDO PATERNO   | APELLIDO MATERNO   | NOMBRES           | RAZON SOCIAL   | TIPO DE DOCUMENTO DE IDENTIDAD   | NUMERO DE DOCUMENTO DE IDENTIDAD   | NUMERO TIPO DE RESPALDO   | MONEDA   | MONTO A SER RETENIDO  |
+|:-------------------|:-------------------|:------------------|:---------------|:---------------------------------|:-----------------------------------|:--------------------------|:---------|:----------------------|
+| RIOJA              | IRIARTE            | MARIA LUZ         |                | CI                               | 5296860 CO.                        | 6362HUS                   |    BS    |         20.5          |
+| GARCIA             | SORIA              | NELY              |                | CI                               | 8675948 CO.                        | 4251UWP                   |    BS    |         40.2          |
+| CASTELLON          | MELGAREJO          | LUIS              |                | CI                               | 524460-10 CO.                      | 524460-10-25-AC01         |    BS    |         55.2          |
+|                    |                    |                   | EMPRESA COTAS  | NIT                              | 5309221017                         | 141260-09-24-AC02         |    BS    |         105           |
         """},
     {"role": "user",
      "content": """Tabla a procesar:

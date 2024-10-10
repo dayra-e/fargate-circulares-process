@@ -32,7 +32,7 @@ prompt_extraction_standard = [
     - Si no es una persona anota el nombre de la institucion financiera o empresa.
 - TIPO DE PROCESO: CIVIL EJECUTIVO, CIVIL MONITOREO EJECUTIVO, EJECUTIVO, PROCESO EJECUTIVO, COACTIVA, FISCAL o MONITORIO EJECUTIVO.
 - MONEDA: BS, USD (dolares) o UFV.
-- MONTO A SER RETENIDO: es la suma demandada y debe estar en formato numerico.
+- MONTO A SER RETENIDO: es la suma que correspondera al campo MONEDA y debe estar en formato numerico.
 - DOCUMENTO DE RESPALDO: solamente puede ser NUREJ, PIET, IANUS o CUD.
 - NUMERO TIPO DE RESPALDO: es el numero del DOCUMENTO DE RESPALDO de mas 5 digitos que tienen c por delante.
 - NOMBRE DE LA AUTORIDAD SOLICITANTE: 

@@ -1,6 +1,6 @@
 import re
 import pandas as pd
-from circulares_info_extraction.config import LoadConfig
+from api.circulares_info_extraction.config import LoadConfig
 
 config = LoadConfig()
 COLS_TO_CLEAN_ACCENTS = config.get_section("cols_to_clean_accents")
@@ -61,7 +61,7 @@ def check_numero_carta_circular(val):
 valid_cities = set(config["ciudades_departamentos_abreviaciones"].keys())
 valid_documentos_identidad = ["CI", "NIT", "RUC"]
 valid_moneda = ["BS", "USD", "UFV"]
-valid_respaldo = ["NUREJ", "PIET", "IANUS"]
+valid_respaldo = ["NUREJ", "PIET", "IANUS", "PLACA", "LICENCIA", "POLIZA", "RESOLUCION ADMINISTRATIVA"]
 
 
 def apply_evaluation(df):

@@ -33,7 +33,6 @@ class CircularStandardModel(BaseModel):
 class CircularTablaInfoProcesoModel(BaseModel):
     nombre_de_la_ciudad_del_solicitante: str
     documento_de_respaldo: str
-    numero_tipo_de_respaldo: str
     numero_de_cite: str
     fecha_de_cite: str
     demandante: str

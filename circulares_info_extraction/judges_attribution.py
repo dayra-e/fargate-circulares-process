@@ -9,11 +9,11 @@ sys.path.append("../../account/")
 import os
 from fuzzywuzzy import process
 
-from circulares_info_extraction.text_processing import customize_list_with_strings
-from circulares_info_extraction.postprocessing import concatenate_if_not_present
-from circulares_info_extraction.prompts import prompt_find_juzgado
-from circulares_info_extraction.api_clients import openai_client
-from circulares_info_extraction.config import LoadConfig
+from api.circulares_info_extraction.text_processing import customize_list_with_strings
+from api.circulares_info_extraction.postprocessing import concatenate_if_not_present
+from api.circulares_info_extraction.prompts import prompt_find_juzgado
+from api.circulares_info_extraction.api_clients import openai_client
+from api.circulares_info_extraction.config import LoadConfig
 
 config = LoadConfig()
 
