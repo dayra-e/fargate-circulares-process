@@ -166,8 +166,8 @@ cols_to_clean_accents:
     - "TIPO DE PROCESO"
 
 paths:
-  juzgados_file: "api/circulares_info_extraction/juzgados.csv"
-  db_names_file: "api/circulares_info_extraction/btn_givennames.txt"
+  juzgados_file: "circulares_info_extraction/juzgados.csv"
+  db_names_file: "circulares_info_extraction/btn_givennames.txt"
 
 ciudades_departamentos_abreviaciones:
   ACHACACHI: LP

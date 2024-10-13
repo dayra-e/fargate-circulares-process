@@ -2,11 +2,11 @@ from PIL import Image, ImageEnhance, ImageFilter
 import cv2
 import numpy as np
 from skimage import color, filters, morphology, util
-from api.circulares_info_extraction.utils_etl import image_to_bytes
+from circulares_info_extraction.utils_etl import image_to_bytes
 from concurrent.futures import ThreadPoolExecutor
 from tenacity import retry, stop_after_attempt, wait_fixed, wait_random
-from api.circulares_info_extraction.api_clients import textract_client
-from api.circulares_info_extraction.config import LoadConfig
+from circulares_info_extraction.api_clients import textract_client
+from circulares_info_extraction.config import LoadConfig
 
 config = LoadConfig()
 config.set_section('image_processing')

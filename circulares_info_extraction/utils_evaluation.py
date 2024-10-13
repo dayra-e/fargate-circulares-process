@@ -1,6 +1,6 @@
 import re
 import pandas as pd
-from api.circulares_info_extraction.config import LoadConfig
+from circulares_info_extraction.config import LoadConfig
 
 config = LoadConfig()
 COLS_TO_CLEAN_ACCENTS = config.get_section("cols_to_clean_accents")

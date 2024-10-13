@@ -16,12 +16,12 @@ class S3Stack(Stack):
                                     removal_policy=RemovalPolicy.DESTROY,
                                     auto_delete_objects=True
                                  )
-        bucket_to_process = s3.Bucket(self, 
+        self.bucket_to_process = s3.Bucket(self, 
                                         "ImagestoProcessgBucket",
                                         versioned=False,
                                         removal_policy=RemovalPolicy.DESTROY,
-                                        auto_delete_objects=True
+                                        auto_delete_objects=True,
+                                        event_bridge_enabled=True
                                     )
-        self.bucket_to_process_arn = bucket_to_process.bucket_arn
-        self.bucket_to_process_name = bucket_to_process.bucket_name
-        self.bucket_results_arn = bucket_results.bucket_arn       
+                # Directly using EventBridge from the bucket
+        self.bucket_results_arn = bucket_results.bucket_arn     

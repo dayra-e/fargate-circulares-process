@@ -1,25 +1,25 @@
 import pandas as pd
-from api.circulares_info_extraction.config import LoadConfig
+from circulares_info_extraction.config import LoadConfig
 
 # Open AI API
-config = LoadConfig('api/circulares_info_extraction/config.yml')
-from api.circulares_info_extraction.utils_etl import load_tiff_pages_from_image
-from api.circulares_info_extraction.image_to_text import extract_text_from_images
-from api.circulares_info_extraction.text_processing import (extraer_json_info_oficios,
+config = LoadConfig('circulares_info_extraction/config.yml')
+from circulares_info_extraction.utils_etl import load_tiff_pages_from_image
+from circulares_info_extraction.image_to_text import extract_text_from_images
+from circulares_info_extraction.text_processing import (extraer_json_info_oficios,
                                                             process_retencion_suspension_remision_in_parallel,
                                                             process_informativas_in_parallel,
                                                             process_oficios_in_parallel,
                                                             fill_carta_template,
                                                             classify_oficios,
                                                             extract_info_normativa)
-from api.circulares_info_extraction.stamp_recognition import (adjusted_find_stamp_confidence,
+from circulares_info_extraction.stamp_recognition import (adjusted_find_stamp_confidence,
                                                               find_stamp_pages_lambda,
                                                               separar_paginas_en_oficios)
-from api.circulares_info_extraction.postprocessing import (prepare_metadata,
+from circulares_info_extraction.postprocessing import (prepare_metadata,
                                                            clean_resultados)
-from api.circulares_info_extraction.judges_attribution import find_judge_name
-from api.circulares_info_extraction.api_clients import openai_client
-from api.circulares_info_extraction.circular_mappers import validate_dataframe
+from circulares_info_extraction.judges_attribution import find_judge_name
+from circulares_info_extraction.api_clients import openai_client
+from circulares_info_extraction.circular_mappers import validate_dataframe
 
 
 config.set_section('openai')

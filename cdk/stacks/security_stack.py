@@ -9,7 +9,7 @@ class SecurityStack(Stack):
         # Crear un Security Group sin tráfico entrante permitido
         self.sg_fargate = ec2.SecurityGroup(self, "FargateSecurityGroup",
             vpc=vpc,
-            description="Security Group para Fargate, sin tráfico entrante",
+            description="Security Group for Fargate, no inbound traffic",
             allow_all_outbound=False  # Permitir todo el tráfico saliente
         )
 
@@ -18,7 +18,7 @@ class SecurityStack(Stack):
         self.sg_fargate.add_egress_rule(
             peer=ec2.Peer.any_ipv4(),  # Permitir tráfico saliente hacia cualquier dirección
             connection=ec2.Port.tcp(443),  # Puerto HTTPS (443)
-            description="Permitir tráfico HTTPS saliente a API externas"
+            description="Allow outbound HTTPS traffic to external APIs"
         )
 
         self.sg_output = self.sg_fargate

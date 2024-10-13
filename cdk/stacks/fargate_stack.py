@@ -2,6 +2,7 @@ from aws_cdk import (
     Stack, 
     aws_ec2 as ec2,
     aws_ecr as ecr,
+    aws_s3 as s3,
     aws_ecs as ecs,
     aws_events as events,
     aws_events_targets as targets,
@@ -13,18 +14,12 @@ class FargateStack(Stack):
     def __init__(self, scope: Construct, 
                  id: str, table_arn: str, 
                  bucket_results_arn: str, 
-                 bucket_to_process_arn: str,
-                 bucket_to_process_name: str,
+                 bucket_to_process: s3.Bucket,    
                  vpc: ec2.IVpc, 
                  security_group: ec2.SecurityGroup,
+                 repository: ecr.Repository,
                  **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        repository = ecr.Repository(self,
-                            "FargateCircularProcessRepository",
-                            repository_name="fargate-circular-process",
-                            removal_policy=RemovalPolicy.DESTROY,
-                            image_tag_mutability=ecr.TagMutability.MUTABLE
-                            )
         
         # Create ECS Cluster
         cluster = ecs.Cluster(self, "FargateCluster", vpc=vpc)
@@ -51,8 +46,8 @@ class FargateStack(Stack):
             ],
             resources=[
                 # Recursos de S3
-                bucket_to_process_arn,  # Bucket ARN
-                f"{bucket_to_process_arn}/*",  # Objetos dentro del bucket
+                bucket_to_process.bucket_arn,  # Bucket ARN
+                f"{bucket_to_process.bucket_arn}/*",  # Objetos dentro del bucket
                 bucket_results_arn,
                 f"{bucket_results_arn}/*",
                 # Recursos de DynamoDB
@@ -78,7 +73,8 @@ class FargateStack(Stack):
             cluster=cluster,
             task_definition=task_definition,
             security_groups=[security_group], 
-            assign_public_ip=True,  # Asignar una IP pública
+            assign_public_ip=True,
+            desired_count=0,# Asignar una IP pública
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC)  # Ejecutar en subnets públicas
         )
         
@@ -89,7 +85,7 @@ class FargateStack(Stack):
                 detail_type=["Object Created"],
                 detail={
                     "bucket": {
-                        "name": [bucket_to_process_name]
+                        "name": [bucket_to_process.bucket_name]
                     }
                 }
             )

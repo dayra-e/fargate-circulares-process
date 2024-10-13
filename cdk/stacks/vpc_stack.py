@@ -32,3 +32,5 @@ class VpcStack(Stack):
         self.vpc.add_interface_endpoint("LambdaEndpoint",
         service=ec2.InterfaceVpcEndpointAwsService.LAMBDA_
         )
+        
+        self.vpc_output = self.vpc
