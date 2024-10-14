@@ -127,7 +127,7 @@ def upload_file_to_s3(image_path, bucket_name, filename, circular_type):
 
 
 # Parámetros de la prueba
-image_path = r"C:\Projects\latam-banks-tech\bancos_app\evaluations\cases\CC-multiple_pages.tif"
+image_path = r"C:\Projects\backup\CC-11507_2024.tiff"
 filename = os.path.splitext(os.path.basename(image_path))[0]
 
 circular_type = "combinada"

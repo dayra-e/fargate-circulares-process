@@ -3,6 +3,7 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecr as ecr,
     aws_s3 as s3,
+    aws_logs as logs,
     aws_ecs as ecs,
     aws_events as events,
     aws_events_targets as targets,
@@ -24,6 +25,11 @@ class FargateStack(Stack):
         # Create ECS Cluster
         cluster = ecs.Cluster(self, "FargateCluster", vpc=vpc)
         
+        # Create a log group
+        log_group = logs.LogGroup(self, "FargateTaskLogGroup",
+            log_group_name="/ecs/fargate-task",
+            removal_policy=RemovalPolicy.DESTROY  # Or any other policy you prefer
+        )
         # Crear una política con todos los permisos necesarios
         task_role = iam.Role(self, "FargateTaskRole",
             assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com")
@@ -40,9 +46,14 @@ class FargateStack(Stack):
                 "dynamodb:GetItem",
                 # Permiso para invocar una función Lambda
                 "lambda:InvokeFunction",
+                # Permisos para Textract
                 "textract:AnalyzeDocument",
                 "textract:DetectDocumentText",
-                "textract:GetDocumentAnalysis"                
+                "textract:GetDocumentAnalysis",
+                # Permisos para CloudWatch Logs
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:CreateLogGroup"              
             ],
             resources=[
                 # Recursos de S3
@@ -53,9 +64,11 @@ class FargateStack(Stack):
                 # Recursos de DynamoDB
                 table_arn,
                 "arn:aws:lambda:eu-west-2:330797680824:function:detector_de_sello_new",
-                "*"
+                "*",
+                log_group.log_group_arn,  # Referencing the ARN of the log group created above
+                f"{log_group.log_group_arn}:*"  # Optionally include streams inside the log group
             ]
-        ))
+        ))        
         
         # Define a Fargate task definition
         task_definition = ecs.FargateTaskDefinition(self, "FargateTaskDef",
@@ -66,7 +79,10 @@ class FargateStack(Stack):
         
         container = task_definition.add_container("FargateContainer",
             image=ecs.ContainerImage.from_ecr_repository(repository),
-            logging=ecs.LogDrivers.aws_logs(stream_prefix="FargateTask")
+            logging=ecs.AwsLogDriver(
+                stream_prefix="FargateTask",
+                log_group=log_group
+            )
         )
         
         ecs.FargateService(self, "CircularFargateService",

@@ -1,10 +1,4 @@
-try:
-    from img2table.document.image import Image as ImageTable
-except:
-    try:
-        from img2table.document.image import Image as ImageTable    
-    except Exception as e:
-        print(f"Error: {e}")
+from img2table.document import Image as ImageTable
 from tenacity import retry, stop_after_attempt, wait_fixed, wait_random
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pandas as pd
@@ -122,8 +116,7 @@ def check_tables(imagenes_oficios, threshold=THRESHOLD_TABLE, min_confidence=MIN
                 print("max_possible", max_possible_tables_percentage)
                 return False
         return False
-    else:
-        print(f"Extracted tables >100: {extracted_tables}")
+    else:    
         sample_size = int(len(imagenes_oficios)*SAMPLE_PERCENTAGE)
         # Tomar una muestra de acuerdo al tamaño de la lista
         sample = random.sample(imagenes_oficios, sample_size)

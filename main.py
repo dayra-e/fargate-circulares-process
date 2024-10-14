@@ -141,7 +141,7 @@ def check_and_save_to_dynamo(filename):
 
 def main():
     # Extraer la key desde las variables de entorno pasado por eventbridge
-    TABLE_NAME = os.environ.get("TABLE_NAME")       
+    s3_key = os.environ.get("S3_KEY")       
 
     if not s3_key:
         logger.error("Bucket or Key missing from environment variables.")
