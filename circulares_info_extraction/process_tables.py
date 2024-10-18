@@ -103,7 +103,6 @@ def check_tables(imagenes_oficios, threshold=THRESHOLD_TABLE, min_confidence=MIN
                 for table in extracted_tables:
                     _, height = img.size
                     if check_if_table_is_valid(table.bbox, height): 
-                      print("table is valid")
                       pages_with_tables += 1
                       break
             # Calculate the maximum possible tables percentage for the remaining pages
@@ -113,7 +112,6 @@ def check_tables(imagenes_oficios, threshold=THRESHOLD_TABLE, min_confidence=MIN
             if pages_with_tables / total_pages >= threshold:
                 return True
             elif max_possible_tables_percentage < threshold:
-                print("max_possible", max_possible_tables_percentage)
                 return False
         return False
     else:    
@@ -138,7 +136,6 @@ def check_tables(imagenes_oficios, threshold=THRESHOLD_TABLE, min_confidence=MIN
 
             # Check if it's already impossible to meet or exceed the threshold with the remaining pages
             if pages_with_tables / sample_size >= threshold:
-                print(extracted_tables)
                 return True
             elif max_possible_tables_percentage < threshold:
                 return False

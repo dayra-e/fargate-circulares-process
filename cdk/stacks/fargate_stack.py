@@ -23,7 +23,9 @@ class FargateStack(Stack):
         super().__init__(scope, id, **kwargs)
         
         # Create ECS Cluster
-        cluster = ecs.Cluster(self, "FargateCluster", vpc=vpc)
+        cluster = ecs.Cluster(self, "FargateCluster", 
+                              vpc=vpc,
+                              container_insights=True)
         
         # Create a log group
         log_group = logs.LogGroup(self, "FargateTaskLogGroup",
@@ -72,8 +74,8 @@ class FargateStack(Stack):
         
         # Define a Fargate task definition
         task_definition = ecs.FargateTaskDefinition(self, "FargateTaskDef",
-            memory_limit_mib=8192,  # 8 GB de memoria
-            cpu=2048,
+            memory_limit_mib=6144,  # 8 GB de memoria
+            cpu=1024,
             task_role=task_role,
         )
         
@@ -85,13 +87,13 @@ class FargateStack(Stack):
             )
         )
         
-        ecs.FargateService(self, "CircularFargateService",
+        fargate_service = ecs.FargateService(self, "CircularFargateService",
             cluster=cluster,
             task_definition=task_definition,
             security_groups=[security_group], 
             assign_public_ip=True,
             desired_count=0,# Asignar una IP pública
-            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC)  # Ejecutar en subnets públicas
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),  # Ejecutar en subnets públicas
         )
         
         # Create EventBridge rule that triggers the Fargate task when an S3 event occurs
@@ -115,6 +117,7 @@ class FargateStack(Stack):
             assign_public_ip=True,
             task_count=1,
             launch_type=ecs.LaunchType.FARGATE,
+            retry_attempts=0,
             container_overrides=[{
                 "containerName": "FargateContainer",  # Container name must match the one defined earlier
                 "environment": [

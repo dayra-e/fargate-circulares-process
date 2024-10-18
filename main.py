@@ -140,29 +140,33 @@ def check_and_save_to_dynamo(filename):
         return True
 
 def main():
-    # Extraer la key desde las variables de entorno pasado por eventbridge
-    s3_key = os.environ.get("S3_KEY")       
+    try:
+        # Extraer la key desde las variables de entorno pasado por EventBridge
+        s3_key = os.environ.get("S3_KEY")
+        
+        if not s3_key:
+            raise ValueError("Bucket or Key missing from environment variables.")
+        
+        # Obtener los metadatos del objeto en S3
+        response = s3_client.head_object(Bucket=S3_TOPROCESS_BUCKET, Key=s3_key)
+        metadata = response['Metadata']
+        filename = metadata.get('filename')
+        circular_type = metadata.get('circular_type')
+        
+        if check_and_save_to_dynamo(filename):
+            # Descargar el archivo desde S3
+            s3_response = s3_client.get_object(Bucket=S3_TOPROCESS_BUCKET, Key=s3_key)
+            file_content = s3_response['Body'].read()
 
-    if not s3_key:
-        logger.error("Bucket or Key missing from environment variables.")
-        return
+            # Procesar la imagen
+            resultado_df_validated, time_to_process = process_tiff_image(file_content, s3_key, circular_type)
 
-    # Obtener los metadatos del objeto en S3
-    response = s3_client.head_object(Bucket=S3_TOPROCESS_BUCKET, Key=s3_key)
-    metadata = response['Metadata']
-    filename = metadata.get('filename')
-    circular_type = metadata.get('circular_type')
+            # Guardar el resultado en S3 y DynamoDB
+            save_result_to_dynamoands3(filename, resultado_df_validated, time_to_process)
     
-    if check_and_save_to_dynamo(filename):
-        # Descargar el archivo desde S3
-        s3_response = s3_client.get_object(Bucket=S3_TOPROCESS_BUCKET, Key=s3_key)
-        file_content = s3_response['Body'].read()
-
-        # Procesar la imagen
-        resultado_df_validated, time_to_process = process_tiff_image(file_content, s3_key, circular_type)
-
-        # Guardar el resultado en S3 y DynamoDB
-        save_result_to_dynamoands3(filename, resultado_df_validated, time_to_process)
+    except Exception as e:
+        #logger.error(f"Error occurred: {str(e)}")
+        traceback.print_exc()
 
 if __name__ == "__main__":
     main()

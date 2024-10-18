@@ -181,8 +181,6 @@ def find_stamp_pages_lambda(imgs,
                                                        page,
                                                        pages_with_stamp,
                                                        min_confidence)
-                else:
-                    print(f"Page {page + 1}: No custom labels found.")
             else:
                 try:
                     if status_code == 202:
@@ -196,8 +194,6 @@ def find_stamp_pages_lambda(imgs,
                                                                page,
                                                                pages_with_stamp,
                                                                min_confidence)
-                        else:
-                            print(f"Page {page + 1}: No custom labels found.")
                 except Exception as e:
                     print(f"Error processing page {page}: {e}")
         # Crear nuevas listas ordenadas utilizando los índices ordenadas
