@@ -22,6 +22,8 @@ Ensure you have the following installed:
 - Docker
 - AWS CDK
 ```
+## AWS Architecture
+![Architecture Diagram](https://github.com/dayra-e/fargate-circulares-process/blob/main/assets/diagrama.png)
 ## Setup
 To set up this project, follow these steps:
 
