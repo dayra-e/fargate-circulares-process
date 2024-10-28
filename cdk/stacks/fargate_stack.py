@@ -96,6 +96,12 @@ class FargateStack(Stack):
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),  # Ejecutar en subnets públicas
         )
         
+        # Configurar el Auto Scaling sin métricas adicionales
+        scaling = fargate_service.auto_scale_task_count(
+            min_capacity=0,
+            max_capacity=6
+        )        
+        
         # Create EventBridge rule that triggers the Fargate task when an S3 event occurs
         rule = events.Rule(self, "EventRule",
             event_pattern=events.EventPattern(
